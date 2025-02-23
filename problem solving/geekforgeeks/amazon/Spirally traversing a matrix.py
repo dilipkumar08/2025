@@ -12,11 +12,13 @@ class Solution:
             for j in range(top,bottom+1):
                 res.append(mat[j][right])
             right-=1
-            for k in range(right,left-1,-1):
-                res.append(mat[bottom][k])
-            bottom-=1
-            for l in range(bottom,top-1,-1):
-                res.append(mat[l][left])
-            left+=1
+            if top<bottom:
+                for k in range(right,left-1,-1):
+                    res.append(mat[bottom][k])
+                bottom-=1
+            if left<right:
+                for l in range(bottom,top-1,-1):
+                    res.append(mat[l][left])
+                left+=1
         return res
    
