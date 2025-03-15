@@ -51,7 +51,32 @@ class BinarySearchTree():
                 else:
                     root.data=self.min_inorder(root.right).data
                     root.right,status=self.delete_recursive(root.right,root.data,status)
+
+
             return root,status
+    
+    def find(self,val):
+        status=self.find_recursive(self.root,val,"found")
+        print(val,status)
+
+    def find_recursive(self,root: Node,val:int,status:str):
+        if not root:
+            return "not found"
+        else:
+            if root.data>val:
+                return self.find_recursive(root.left,val,status)
+            elif root.data<val:
+                return self.find_recursive(root.right,val,status)
+            else:
+                return status
+            
+    def height(self,root):
+        if not root:
+            return 0
+        right=self.height(root.right)
+        left=self.height(root.left)
+        return max(right,left)+1
+
 
     def min_inorder(self,root):
         while root.left:
@@ -63,6 +88,8 @@ class BinarySearchTree():
             self.inOrder(root.left)
             print(root.data,end=" ")
             self.inOrder(root.right)
+
+
 
 if __name__=="__main__":
     b1=BinarySearchTree()
@@ -79,4 +106,7 @@ if __name__=="__main__":
     b1.inOrder(b1.root)
     b1.delete(12)
     b1.inOrder(b1.root)
-
+    b1.find(15)
+    b1.find(12)
+    b1.height(b1.root)
+    
