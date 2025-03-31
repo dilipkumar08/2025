@@ -1,7 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
-import numpy as np
+from flask import Flask, render_template, request
 import pickle as pkl
-import os
 import pandas as pd
 
 app = Flask(__name__)
