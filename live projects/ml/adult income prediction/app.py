@@ -70,7 +70,9 @@ def predict():
             'country': [country],
             'education': [education]
         })
-        model=pkl.load(open("adult_income_model.pkl","rb"))
+        model_path="adult_income_model.pkl"
+        with open(model_path,'rb') as file:
+            model=pkl.load(file)
         result=model.predict(input_data)
         if result==0:
             prediction_result="<=50000"
