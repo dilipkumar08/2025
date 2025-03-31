@@ -70,7 +70,7 @@ def predict():
             'country': [country],
             'education': [education]
         })
-        model=pkl.load(open("D:/2025 coding/projects/adult income ml flask deploy p2/adult_income_model.pkl","rb"))
+        model=pkl.load(open("adult_income_model.pkl","rb"))
         result=model.predict(input_data)
         if result==0:
             prediction_result="<=50000"
