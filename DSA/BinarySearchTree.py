@@ -77,7 +77,6 @@ class BinarySearchTree():
         left=self.height(root.left)
         return max(right,left)+1
 
-
     def min_inorder(self,root):
         while root.left:
             root=root.left
@@ -102,7 +101,6 @@ if __name__=="__main__":
     b1.insert(8)
     b1.insert(3)
     b1.insert(15)
-
     b1.inOrder(b1.root)
     b1.delete(12)
     b1.inOrder(b1.root)
