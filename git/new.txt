@@ -1,0 +1,6 @@
+I have created this text file through terminal
+and commited it with git 
+um pretty much going to become a great coder with huge salary
+
+so so this part of text is when I am doing a second commit very excited thinking I am genius I like this 
+so, there's three process which happens towards commit first modifying , staging stage and commit which happens in three stages which are the working directory, staging are and repository
