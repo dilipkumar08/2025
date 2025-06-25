@@ -2,3 +2,4 @@ print("yahoooo! I have created a repository using git and writing code in termin
 print("Now I am going to add this file without um staging muhaha")
 print("I am going to check the difference btw the code before I added this and after using git diff")
 print("It seems like you shouldn't commit before using the diff cmd)
+print("I am adding to test git add -p")
