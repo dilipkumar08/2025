@@ -1,1 +1,0 @@
-this is a file which is created to get ignored by the git because I have added *.txt in gitignore
