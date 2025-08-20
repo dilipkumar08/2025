@@ -1,7 +1,7 @@
 
 #function to compare the versions
 def versionComparison(version1:str,version2:str)->bool:
-    
+
     #splitting and type casting to compare each partitions
     version1Partitions=list(map(int,version1.split(".")))
     version2Partitions=list(map(int,version2.split(".")))
@@ -34,10 +34,6 @@ def versionComparison(version1:str,version2:str)->bool:
     
     #both are same  
     return 0
-
-
-
-
 
 #main block
 if __name__ == "__main__":
