@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Minimal Cards Demo</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 24px auto; }
+    input, textarea, button { font: inherit; }
+    input, textarea { width: 100%; padding: 8px; margin: 6px 0; }
+    button { padding: 8px 12px; margin-top: 8px; }
+    .card { padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin: 6px 0; }
+    .muted { color: #666; }
+  </style>
+</head>
+<body>
+  <h1>Cards (Minimal HTML + JS)</h1>
+
+  <!-- config -->
+  <p class="muted">
+    Set your Cards API base URL here:
+    <code id="showBase"></code>
+  </p>
+
+  <!-- add form -->
+  <h2>Add Card</h2>
+  <label>Question</label>
+  <input id="q" placeholder="e.g. What is Python?" />
+  <label>Answer</label>
+  <textarea id="a" placeholder="e.g. A programming language"></textarea>
+  <button id="addBtn">Add</button>
+
+  <hr />
+
+  <!-- list -->
+  <h2>All Cards</h2>
+  <button id="loadBtn">Load Cards</button>
+  <div id="cards"></div>
+
+  <script>
+    // ==== 1) CONFIG: point this to your Flask Cards service ====
+    // Examples:
+    //   Local:     "http://127.0.0.1:5000"
+    //   Codespace: "https://<your-codespace-id>-5000.app.github.dev"
+      
+    const BASE_URL = "https://crispy-palm-tree-xgpgpq55xgfv7wg-5000.app.github.dev";
+    document.getElementById('showBase').textContent = BASE_URL;
+
+    // Small helpers that wrap fetch for clarity:
+    async function getJSON(url) {
+      const res = await fetch(url);              // fetch defaults to GET
+      if (!res.ok) throw new Error(res.status);  // simple error check
+      return res.json();                         // parse JSON into JS object/array
+    }
+    async function postJSON(url, body) {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(res.status + " " + text);
+      }
+      return res.json();
+    }
+
+    // ==== 2) ADD A CARD (POST /cards) ====
+    // Expected backend: reads JSON {question, answer} and returns the created card
+    document.getElementById('addBtn').addEventListener('click', async () => {
+      const question = document.getElementById('q').value.trim();
+      const answer   = document.getElementById('a').value.trim();
+
+      if (!question) {
+        alert("Please enter a question.");
+        return;
+      }
+
+      try {
+        // Send POST to backend
+        const created = await postJSON(`${BASE_URL}/cards`, { question, answer });
+        console.log("Created:", created);
+
+        // Clear inputs
+        document.getElementById('q').value = "";
+        document.getElementById('a').value = "";
+
+        // Reload list so you can see the new card
+        await loadCards();
+      } catch (err) {
+        console.error(err);
+        alert("Failed to add card: " + err.message);
+      }
+    });
+
+    // ==== 3) DISPLAY ALL CARDS (GET /cards) ====
+    async function loadCards() {
+      const container = document.getElementById('cards');
+      container.innerHTML = "<p class='muted'>Loading…</p>";
+      try {
+        const data = await getJSON(`${BASE_URL}/cards`);
+        // data should be an array like:
+        // [ { id: 1, question: "...", answer: "..." }, ... ]
+
+        if (!Array.isArray(data) || data.length === 0) {
+          container.innerHTML = "<p class='muted'>No cards yet.</p>";
+          return;
+        }
+
+        // Render each card
+        container.innerHTML = "";
+        data.forEach(card => {
+          const div = document.createElement('div');
+          div.className = "card";
+          div.innerHTML = `
+            <div><strong>#${card.id}</strong></div>
+            <div><strong>Q:</strong> ${card.question ?? ""}</div>
+            <div><strong>A:</strong> ${card.answer ?? ""}</div>
+          `;
+          container.appendChild(div);
+        });
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = "<p class='muted'>Failed to load cards: " + err.message + "</p>";
+      }
+    }
+
+    // Button that calls loadCards on demand
+    document.getElementById('loadBtn').addEventListener('click', loadCards);
+
+    // Optional: load on page open
+    loadCards();
+  </script>
+</body>
+</html>
